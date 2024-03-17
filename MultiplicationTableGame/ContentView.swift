@@ -17,6 +17,18 @@ struct ContentView: View {
     
     // Randomly generate as many questions as they asked for, within the difficulty range they asked for
     @State private var answer: String = ""
+    @State private var questions: [Question] = []
+    
+    func generateQuestions(multplicationTable: Int, amountOfQuestions: Int) -> [Question] {
+        var questions: [Question] = Array(repeating: Question(), count: amountOfQuestions)
+        
+        
+        for index in 0..<questions.count {
+            questions[index] = Question(firstNumber: multplicationTable, secondNumber: Int.random(in: 0...12))
+        }
+        
+        return questions
+    }
     
     var body: some View {
         NavigationStack {
@@ -65,12 +77,29 @@ struct ContentView: View {
                 }
                 .padding([.top, .horizontal])
                 
+                Button {
+                    questions = generateQuestions(multplicationTable: multiplicationTable, amountOfQuestions: selectedQuestionAmount)
+                    for index in 0..<questions.count {
+                        print("\(questions[index]) || answer: \(questions[index].answer)")
+                    }
+                } label: {
+                    Text("Generate")
+                }
+                
                 Spacer()
                 Spacer()
                 
             }
             .navigationTitle("⨷ Multiplier Master")
         }
+    }
+}
+
+struct Question {
+    var firstNumber: Int = 0
+    var secondNumber: Int = 0
+    var answer: Int {
+        firstNumber * secondNumber
     }
 }
 
