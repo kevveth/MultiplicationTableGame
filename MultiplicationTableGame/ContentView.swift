@@ -32,6 +32,11 @@ struct ContentView: View {
     @State private var isCorrect = false
     @State private var isIncorrect = false
     
+    // Error handling
+    @State private var errorTitle: String = ""
+    @State private var errorMessage: String = ""
+    @State private var showingError = false
+    
     func generateQuestions(multplicationTable: Int, amountOfQuestions: Int) -> [Question] {
         var questions: [Question] = Array(repeating: Question(), count: amountOfQuestions)
         
@@ -50,19 +55,25 @@ struct ContentView: View {
     }
     
     func checkAnswer() {
-        let answer: Int = Int(answer)!
+        let answer: Int? = Int(answer)
         
-        if answer == currentQuestion.answer {
-            score += 1
-            isCorrect = true
+        if let answer = answer {
+            if answer == currentQuestion.answer {
+                score += 1
+                isCorrect = true
+            } else {
+                isIncorrect = true
+            }
+            
+            turn += 1
+            if turn == selectedQuestionAmount { gameIsOver = true }
+            
+            currentQuestion = questions[turn-1]
+            
         } else {
-            isIncorrect = true
+            inputError(title: "Your input's lookin' a little empty there", message: "Try guessing if you don't know! 🤠")
         }
         
-        turn += 1
-        if turn == selectedQuestionAmount { gameIsOver = true }
-        
-        currentQuestion = questions[turn-1]
     }
     
     func resetGame() {
@@ -73,6 +84,14 @@ struct ContentView: View {
         turn = 0
         gameIsOver = false
     }
+    
+    func inputError(title: String, message: String) {
+        errorTitle = title
+        errorMessage = message
+        showingError = true
+    }
+    
+    @State private var animating = false
     
     var body: some View {
         NavigationStack {
@@ -86,6 +105,13 @@ struct ContentView: View {
                                 .font(.title)
                         }
                         .scaleUpDown(multiplicationTable: multiplicationTable)
+                        .scaleEffect(animating ? 1.3 : 1)
+                        .onChange(of: multiplicationTable) {
+                            withAnimation(.interpolatingSpring(stiffness: 170, damping: 5)) {
+                                animating = true
+                            }
+                            animating = false
+                        }
                     }
                 }
                 .padding([.bottom, .horizontal])
@@ -100,17 +126,18 @@ struct ContentView: View {
                 }
                 .padding([.bottom, .horizontal])
                 
-                Text("What is...?")
+                Spacer()
                 
                 QuestionDisplay(question: currentQuestion)
-                    
-                Section("Type your answer here"){
+                
+                Section("What is...?"){
                     TextField("Type your answer here", text: $answer)
                         .keyboardType(.numberPad)
                         .textFieldStyle(.roundedBorder)
                     
                 }
                 .padding([.top, .horizontal])
+                .onSubmit(checkAnswer)
                 
                 Button {
                     startGame()
@@ -131,7 +158,6 @@ struct ContentView: View {
             }
             .navigationTitle("⨷ Multiplier Master")
         }
-        .onSubmit(checkAnswer)
         .alert("That's correct! 🥳", isPresented: $isCorrect) {
             Button("Continue") { answer = "" }
         } message: {
@@ -141,6 +167,11 @@ struct ContentView: View {
             Button("Continue") { answer = "" }
         } message: {
             Text("Your score is \(score)")
+        }
+        .alert(errorTitle, isPresented: $showingError) {
+            Button("Continue") { answer = "" }
+        } message: {
+            Text(errorMessage)
         }
         .alert("Game Over!", isPresented: $gameIsOver) {
             Button("Reset", action: resetGame)
@@ -203,7 +234,6 @@ struct NumberBox: View {
 // -- MODIFIERS --
 
 // Scales the picker image up and down
-@MainActor
 struct ScaleUpDown: ViewModifier {
     @State private var animating = false
     var multiplicaitonTable: Int
