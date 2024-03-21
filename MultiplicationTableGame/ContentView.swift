@@ -186,30 +186,7 @@ struct ContentView: View {
                         print("\(questions[index]) || answer: \(questions[index].answer)")
                     }
                 } label: {
-                    if !activeGame{
-                        ZStack{
-                            Capsule()
-                                .frame(height: 50)
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal)
-                            Text("Start Game")
-                                .bold()
-                                .font(.largeTitle)
-                                .foregroundStyle(.white)
-                                .padding()
-                        }
-                    } else {
-                        ZStack{
-                            Capsule()
-                                .foregroundStyle(.red)
-                                .frame(width: 100,height: 40)
-                                .padding(.horizontal)
-                            Text("Reset")
-                                .bold()
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                        }
-                    }
+                    StartGameButton(isActive: $activeGame)
                 }
                 
                 VStack {
