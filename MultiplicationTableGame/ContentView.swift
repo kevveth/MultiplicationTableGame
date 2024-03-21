@@ -11,10 +11,13 @@ struct ContentView: View {
     // Player needs to select a multiplication table to practice
     @State private var multiplicationTable: Int = 2
     
-    // Player should be asked how many questions they want to be asked: 5, 10, or 20
+    // Player should be asked how many questions they want to be asked: 5, 10, 15 or 20
     let amountOfQuestions = [5, 10, 15, 20]
     @State private var selectedQuestionAmount: Int = 5
     
+    // Player should choose a difficulty level between 1 and 3
+    let difficultyLevel = [1, 2, 3]
+    @State private var diffifulty: Int = 1
     
     // Randomly generate as many questions as they asked for, within the difficulty range they asked for
     @State private var questions: [Question] = []
@@ -25,7 +28,7 @@ struct ContentView: View {
     
     // Game data
     @State private var score: Int = 0
-    @State private var turn: Int = 0
+    @State private var turn: Int = 1
     
     // Alerts
     @State private var gameIsOver = false
@@ -37,21 +40,35 @@ struct ContentView: View {
     @State private var errorMessage: String = ""
     @State private var showingError = false
     
-    func generateQuestions(multplicationTable: Int, amountOfQuestions: Int) -> [Question] {
+    @State private var activeGame = false
+    
+    func generateQuestions(multplicationTable: Int, amountOfQuestions: Int, difficultyLevel: Int) -> [Question] {
         var questions: [Question] = Array(repeating: Question(), count: amountOfQuestions)
         
-        
         for index in 0..<questions.count {
-            questions[index] = Question(firstNumber: multplicationTable, secondNumber: Int.random(in: 0...12))
+            
+            
+            switch difficultyLevel {
+            case 1:
+                questions[index] = Question(firstNumber: multplicationTable, secondNumber: Int.random(in: 0...3))
+            case 2:
+                questions[index] = Question(firstNumber: multplicationTable, secondNumber: Int.random(in: 4...7))
+            case 3:
+                questions[index] = Question(firstNumber: multplicationTable, secondNumber: Int.random(in: 8...12))
+            default:
+                questions[index] = Question(firstNumber: multplicationTable, secondNumber: Int.random(in: 0...12))
+            }
         }
         
         return questions
     }
     
     func startGame() {
-        resetGame()
-        questions = generateQuestions(multplicationTable: multiplicationTable, amountOfQuestions: selectedQuestionAmount)
+        if activeGame { resetGame() }
+        questions = generateQuestions(multplicationTable: multiplicationTable, amountOfQuestions: selectedQuestionAmount, difficultyLevel: diffifulty)
+        
         currentQuestion = questions.first!
+        activeGame = true
     }
     
     func checkAnswer() {
@@ -65,11 +82,12 @@ struct ContentView: View {
                 isIncorrect = true
             }
             
-            turn += 1
-            if turn == selectedQuestionAmount { gameIsOver = true }
+            if turn == questions.count { gameIsOver = true }
             
-            currentQuestion = questions[turn-1]
-            
+            if turn < questions.count {
+                turn += 1
+                currentQuestion = questions[turn-1]
+            }
         } else {
             inputError(title: "Your input's lookin' a little empty there", message: "Try guessing if you don't know! 🤠")
         }
@@ -81,7 +99,7 @@ struct ContentView: View {
         currentQuestion = Question()
         answer = ""
         score = 0
-        turn = 0
+        turn = 1
         gameIsOver = false
     }
     
@@ -128,26 +146,45 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                QuestionDisplay(question: currentQuestion)
+                Section("Difficulty Level") {
+                    Picker("", selection: $diffifulty) {
+                        ForEach(difficultyLevel, id: \.self) { level in
+                            Text("\(level)")
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                .padding([.bottom, .horizontal])
+                
+                Spacer()
                 
                 Section("What is...?"){
-                    TextField("Type your answer here", text: $answer)
-                        .keyboardType(.numberPad)
-                        .textFieldStyle(.roundedBorder)
-                    
+                    QuestionDisplay(question: currentQuestion)
                 }
-                .padding([.top, .horizontal])
-                .onSubmit(checkAnswer)
+                .padding(.top)
                 
+                if activeGame {
+                    Section("What is...?"){
+                        TextField("Type your answer here", text: $answer)
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(.roundedBorder)
+                        
+                    }
+                    .padding([.top, .horizontal])
+                    .onSubmit(checkAnswer)
+                }
+                
+                //                if !activeGame {
                 Button {
                     startGame()
-                    //                    for index in 0..<questions.count {
-                    //                        print("\(questions[index]) || answer: \(questions[index].answer)")
-                    //                    }
+                    for index in 0..<questions.count {
+                        print("\(questions[index]) || answer: \(questions[index].answer)")
+                    }
                 } label: {
-                    Text("Start Game")
+                    Text(!activeGame ? "Start Game" : "Reset Game")
                 }
-                .padding()
+                .sunButton()
+                //                }
                 
                 Text("Turn: \(turn)/\(selectedQuestionAmount)")
                 Text("Score: \(score)")
@@ -157,6 +194,14 @@ struct ContentView: View {
                 
             }
             .navigationTitle("⨷ Multiplier Master")
+        }
+        .alert("Game Over!", isPresented: $gameIsOver) {
+            Button("Reset") {
+                activeGame = false
+                resetGame()
+            }
+        } message: {
+            Text("Your final score is \(score)/\(selectedQuestionAmount)")
         }
         .alert("That's correct! 🥳", isPresented: $isCorrect) {
             Button("Continue") { answer = "" }
@@ -172,11 +217,6 @@ struct ContentView: View {
             Button("Continue") { answer = "" }
         } message: {
             Text(errorMessage)
-        }
-        .alert("Game Over!", isPresented: $gameIsOver) {
-            Button("Reset", action: resetGame)
-        } message: {
-            Text("Your final score is \(score)/\(selectedQuestionAmount)")
         }
     }
 }
