@@ -41,6 +41,8 @@ struct ContentView: View {
     @State private var showingError = false
     
     @State private var activeGame = false
+    @State private var animating = false
+    
     
     func generateQuestions(multplicationTable: Int, amountOfQuestions: Int, difficultyLevel: Int) -> [Question] {
         var questions: [Question] = Array(repeating: Question(), count: amountOfQuestions)
@@ -109,12 +111,11 @@ struct ContentView: View {
         showingError = true
     }
     
-    @State private var animating = false
+    
     
     var body: some View {
         NavigationStack {
             VStack {
-                Spacer()
                 Section("Times Table") {
                     Stepper(value: $multiplicationTable, in: 2...12, step: 1) {
                         HStack {
@@ -164,41 +165,66 @@ struct ContentView: View {
                 .padding(.top)
                 
                 if activeGame {
-                    Section("What is...?"){
-                        TextField("Type your answer here", text: $answer)
-                            .keyboardType(.numberPad)
-                            .textFieldStyle(.roundedBorder)
+                    Section {
+                        HStack{
+                            Text("✎")
+                                .bold()
+                                .font(.largeTitle)
+                            TextField("Type your answer here", text: $answer)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(.roundedBorder)
+                        }
                         
                     }
-                    .padding([.top, .horizontal])
+                    .padding()
                     .onSubmit(checkAnswer)
                 }
                 
-                //                if !activeGame {
                 Button {
                     startGame()
                     for index in 0..<questions.count {
                         print("\(questions[index]) || answer: \(questions[index].answer)")
                     }
                 } label: {
-                    Text(!activeGame ? "Start Game" : "Reset Game")
+                    if !activeGame{
+                        ZStack{
+                            Capsule()
+                                .frame(height: 50)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal)
+                            Text("Start Game")
+                                .bold()
+                                .font(.largeTitle)
+                                .foregroundStyle(.white)
+                                .padding()
+                        }
+                    } else {
+                        ZStack{
+                            Capsule()
+                                .foregroundStyle(.red)
+                                .frame(width: 100,height: 40)
+                                .padding(.horizontal)
+                            Text("Reset")
+                                .bold()
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                        }
+                    }
                 }
-                .sunButton()
-                //                }
                 
-                Text("Turn: \(turn)/\(selectedQuestionAmount)")
-                Text("Score: \(score)")
-                
-                Spacer()
-                Spacer()
+                VStack {
+                    Text("Turn: \(turn)/\(selectedQuestionAmount)")
+                    Text("Score: \(score)")
+                }
+                .padding(.vertical)
                 
             }
             .navigationTitle("⨷ Multiplier Master")
         }
         .alert("Game Over!", isPresented: $gameIsOver) {
             Button("Reset") {
-                activeGame = false
                 resetGame()
+                activeGame = false
             }
         } message: {
             Text("Your final score is \(score)/\(selectedQuestionAmount)")
@@ -220,6 +246,8 @@ struct ContentView: View {
         }
     }
 }
+
+// -- MODELS --
 
 struct Question {
     var firstNumber: Int = 0
