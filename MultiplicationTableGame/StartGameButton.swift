@@ -15,7 +15,7 @@ struct StartGameButton: View {
             Capsule()
                 .frame(height: !isActive ? 50 : 40)
                 .frame(maxWidth: !isActive ? .infinity : 120)
-                .padding(.horizontal)
+//                .padding(.horizontal)
                 .shadow(radius: 6)
             
             Text(!isActive ? "Start Game" : "Regenerate")

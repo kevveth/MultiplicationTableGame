@@ -11,8 +11,12 @@
 		6C01DFCB2BA11B0D00D5A1AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C01DFCA2BA11B0D00D5A1AA /* ContentView.swift */; };
 		6C01DFCD2BA11B0F00D5A1AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C01DFCC2BA11B0F00D5A1AA /* Assets.xcassets */; };
 		6C01DFD12BA11B0F00D5A1AA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C01DFD02BA11B0F00D5A1AA /* Preview Assets.xcassets */; };
-		6C6D2C412BAC15EE008F9F7B /* StartGameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6D2C402BAC15EE008F9F7B /* StartGameButton.swift */; };
+		6C0804182BB3EF300025D533 /* ScaleUpDownModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0804172BB3EF300025D533 /* ScaleUpDownModifier.swift */; };
+		6C08041A2BB3EFA50025D533 /* NumberCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0804192BB3EFA50025D533 /* NumberCardView.swift */; };
+		6C08041C2BB3F0060025D533 /* QuestionDisplayVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C08041B2BB3F0060025D533 /* QuestionDisplayVIew.swift */; };
+		6C08041E2BB3F0BD0025D533 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C08041D2BB3F0BD0025D533 /* Question.swift */; };
 		6C6D2C432BACCB2D008F9F7B /* CustomNavStackModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6D2C422BACCB2D008F9F7B /* CustomNavStackModifiers.swift */; };
+		6C6D2C442BB395B5008F9F7B /* StartGameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6D2C402BAC15EE008F9F7B /* StartGameButton.swift */; };
 		6CA20D742BAB9FC50082A791 /* CapsuleGradientButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA20D732BAB9FC50082A791 /* CapsuleGradientButtonStyle.swift */; };
 		6CA20D762BABAFBD0082A791 /* DynamicGradientBorderCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA20D752BABAFBD0082A791 /* DynamicGradientBorderCapsule.swift */; };
 		6CA20D782BABC1CB0082A791 /* DynamicGradientBorderButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA20D772BABC1CB0082A791 /* DynamicGradientBorderButtonStyle.swift */; };
@@ -25,6 +29,10 @@
 		6C01DFCC2BA11B0F00D5A1AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C01DFCE2BA11B0F00D5A1AA /* MultiplicationTableGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MultiplicationTableGame.entitlements; sourceTree = "<group>"; };
 		6C01DFD02BA11B0F00D5A1AA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6C0804172BB3EF300025D533 /* ScaleUpDownModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleUpDownModifier.swift; sourceTree = "<group>"; };
+		6C0804192BB3EFA50025D533 /* NumberCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberCardView.swift; sourceTree = "<group>"; };
+		6C08041B2BB3F0060025D533 /* QuestionDisplayVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionDisplayVIew.swift; sourceTree = "<group>"; };
+		6C08041D2BB3F0BD0025D533 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		6C6D2C402BAC15EE008F9F7B /* StartGameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameButton.swift; sourceTree = "<group>"; };
 		6C6D2C422BACCB2D008F9F7B /* CustomNavStackModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavStackModifiers.swift; sourceTree = "<group>"; };
 		6CA20D732BAB9FC50082A791 /* CapsuleGradientButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleGradientButtonStyle.swift; sourceTree = "<group>"; };
@@ -64,6 +72,10 @@
 			children = (
 				6C01DFC82BA11B0D00D5A1AA /* MultiplicationTableGameApp.swift */,
 				6C01DFCA2BA11B0D00D5A1AA /* ContentView.swift */,
+				6C08041D2BB3F0BD0025D533 /* Question.swift */,
+				6C0804192BB3EFA50025D533 /* NumberCardView.swift */,
+				6C08041B2BB3F0060025D533 /* QuestionDisplayVIew.swift */,
+				6C0804172BB3EF300025D533 /* ScaleUpDownModifier.swift */,
 				6C6D2C422BACCB2D008F9F7B /* CustomNavStackModifiers.swift */,
 				6CA20D732BAB9FC50082A791 /* CapsuleGradientButtonStyle.swift */,
 				6CA20D752BABAFBD0082A791 /* DynamicGradientBorderCapsule.swift */,
@@ -154,12 +166,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C6D2C412BAC15EE008F9F7B /* StartGameButton.swift in Sources */,
+				6C0804182BB3EF300025D533 /* ScaleUpDownModifier.swift in Sources */,
+				6C08041A2BB3EFA50025D533 /* NumberCardView.swift in Sources */,
+				6C6D2C442BB395B5008F9F7B /* StartGameButton.swift in Sources */,
 				6C01DFCB2BA11B0D00D5A1AA /* ContentView.swift in Sources */,
 				6CA20D782BABC1CB0082A791 /* DynamicGradientBorderButtonStyle.swift in Sources */,
+				6C08041C2BB3F0060025D533 /* QuestionDisplayVIew.swift in Sources */,
 				6CA20D742BAB9FC50082A791 /* CapsuleGradientButtonStyle.swift in Sources */,
 				6C01DFC92BA11B0D00D5A1AA /* MultiplicationTableGameApp.swift in Sources */,
 				6CA20D762BABAFBD0082A791 /* DynamicGradientBorderCapsule.swift in Sources */,
+				6C08041E2BB3F0BD0025D533 /* Question.swift in Sources */,
 				6C6D2C432BACCB2D008F9F7B /* CustomNavStackModifiers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

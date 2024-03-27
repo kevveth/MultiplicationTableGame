@@ -40,9 +40,140 @@ struct ContentView: View {
     @State private var errorMessage: String = ""
     @State private var showingError = false
     
-    @State private var activeGame = false
-    @State private var animating = false
+    // Game activity
+    @State private var isActive = false
+    @State private var isAnimating = false
     
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: .none) {
+                if !isActive {
+                    Spacer()
+                    Section("Times Table") {
+                        Stepper(value: $multiplicationTable, in: 2...12, step: 1) {
+                            HStack {
+                                Text("")
+                                Image(systemName: "\(multiplicationTable).square")
+                                    .font(.title)
+                            }
+                            .scaleUpDown(multiplicationTable: multiplicationTable)
+                            .scaleEffect(isAnimating ? 1.3 : 1)
+                            .onChange(of: multiplicationTable) {
+                                withAnimation(.interpolatingSpring(stiffness: 170, damping: 5)) {
+                                    isAnimating = true
+                                }
+                                isAnimating = false
+                            }
+                        }
+                    }
+                    .padding([.bottom, .horizontal])
+                    
+                    Section("Number of Questions") {
+                        Picker("", selection: $selectedQuestionAmount) {
+                            ForEach(amountOfQuestions, id: \.self) { amount in
+                                Text("\(amount)")
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                    .padding([.bottom, .horizontal])
+                    
+                    Spacer()
+                    
+                    Section("Difficulty Level") {
+                        Picker("", selection: $diffifulty) {
+                            ForEach(difficultyLevel, id: \.self) { level in
+                                Text("\(level)")
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                    .padding([.bottom, .horizontal])
+                    
+                }
+                Spacer()
+                
+                //
+                if isActive {
+                    Section("What is...?"){
+                        QuestionDisplay(question: currentQuestion)
+                    }
+                    .padding(.top)
+                    .animation(.easeInOut, value: currentQuestion)
+                    
+                    Section("What is...?"){
+                        TextField("Type your answer here", text: $answer)
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(.roundedBorder)
+                        
+                    }
+                    .padding([.top, .horizontal])
+                    .onSubmit(checkAnswer)
+                }
+                
+                HStack(){
+                    if isActive {
+                        Button("Main Menu", role: .destructive) {
+                            resetGame()
+                            isActive = false
+                        }
+                        .background {
+                            Capsule(style: .continuous)
+                                .frame(width: 120, height: 40)
+                                .foregroundStyle(.paleRose)
+                                .shadow(radius: 6)
+                        }
+                        .padding()
+                    }
+                    
+                    Button {
+                        startGame()
+                        for index in 0..<questions.count {
+                            print("\(questions[index]) || answer: \(questions[index].answer)")
+                        }
+                    } label: {
+                        StartGameButton(isActive: $isActive)
+                            .padding()
+                    }
+                }
+                
+                if isActive {
+                    VStack {
+                        Text("Turn: \(turn)/\(selectedQuestionAmount)")
+                        Text("Score: \(score)")
+                    }
+                    .padding(.vertical)
+                }
+                
+                Spacer()
+                
+            }
+            .navigationTitle("⨷ Multiplier Master")
+        }
+        .alert("That's correct! 🥳", isPresented: $isCorrect) {
+            Button("Continue") { answer = "" }
+        } message: {
+            Text("Your score is \(score)")
+        }
+        .alert("That's incorrect! 🥺", isPresented: $isIncorrect) {
+            Button("Continue") { answer = "" }
+        } message: {
+            Text("Your score is \(score)")
+        }
+        .alert(errorTitle, isPresented: $showingError) {
+            Button("Continue") { answer = "" }
+        } message: {
+            Text(errorMessage)
+        }
+        .alert("Game Over!", isPresented: $gameIsOver) {
+            Button("Reset") {
+                resetGame()
+                isActive = false
+            }
+        } message: {
+            Text("Your final score is \(score)/\(selectedQuestionAmount)")
+        }
+    }
     
     func generateQuestions(multplicationTable: Int, amountOfQuestions: Int, difficultyLevel: Int) -> [Question] {
         var questions: [Question] = Array(repeating: Question(), count: amountOfQuestions)
@@ -66,11 +197,11 @@ struct ContentView: View {
     }
     
     func startGame() {
-        if activeGame { resetGame() }
+        if isActive { resetGame() }
         questions = generateQuestions(multplicationTable: multiplicationTable, amountOfQuestions: selectedQuestionAmount, difficultyLevel: diffifulty)
         
         currentQuestion = questions.first!
-        activeGame = true
+        isActive = true
     }
     
     func checkAnswer() {
@@ -109,203 +240,6 @@ struct ContentView: View {
         errorTitle = title
         errorMessage = message
         showingError = true
-    }
-    
-    
-    
-    var body: some View {
-        NavigationStack {
-            VStack {
-                Section("Times Table") {
-                    Stepper(value: $multiplicationTable, in: 2...12, step: 1) {
-                        HStack {
-                            Text("")
-                            Image(systemName: "\(multiplicationTable).square")
-                                .font(.title)
-                        }
-                        .scaleUpDown(multiplicationTable: multiplicationTable)
-                        .scaleEffect(animating ? 1.3 : 1)
-                        .onChange(of: multiplicationTable) {
-                            withAnimation(.interpolatingSpring(stiffness: 170, damping: 5)) {
-                                animating = true
-                            }
-                            animating = false
-                        }
-                    }
-                }
-                .padding([.bottom, .horizontal])
-                
-                Section("Number of Questions") {
-                    Picker("", selection: $selectedQuestionAmount) {
-                        ForEach(amountOfQuestions, id: \.self) { amount in
-                            Text("\(amount)")
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
-                .padding([.bottom, .horizontal])
-                
-                Spacer()
-                
-                Section("Difficulty Level") {
-                    Picker("", selection: $diffifulty) {
-                        ForEach(difficultyLevel, id: \.self) { level in
-                            Text("\(level)")
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
-                .padding([.bottom, .horizontal])
-                
-                Spacer()
-                
-                Section("What is...?"){
-                    QuestionDisplay(question: currentQuestion)
-                }
-                .padding(.top)
-                
-                if activeGame {
-                    Section {
-                        HStack{
-                            Text("✎")
-                                .bold()
-                                .font(.largeTitle)
-                            TextField("Type your answer here", text: $answer)
-                                .keyboardType(.numberPad)
-                                .textFieldStyle(.roundedBorder)
-                        }
-                        
-                    }
-                    .padding()
-                    .onSubmit(checkAnswer)
-                }
-                
-                Button {
-                    startGame()
-                    for index in 0..<questions.count {
-                        print("\(questions[index]) || answer: \(questions[index].answer)")
-                    }
-                } label: {
-                    StartGameButton(isActive: $activeGame)
-                }
-                
-                VStack {
-                    Text("Turn: \(turn)/\(selectedQuestionAmount)")
-                    Text("Score: \(score)")
-                }
-                .padding(.vertical)
-                
-            }
-            .navigationTitle("⨷ Multiplier Master")
-        }
-        .alert("Game Over!", isPresented: $gameIsOver) {
-            Button("Reset") {
-                resetGame()
-                activeGame = false
-            }
-        } message: {
-            Text("Your final score is \(score)/\(selectedQuestionAmount)")
-        }
-        .alert("That's correct! 🥳", isPresented: $isCorrect) {
-            Button("Continue") { answer = "" }
-        } message: {
-            Text("Your score is \(score)")
-        }
-        .alert("That's incorrect! 🥺", isPresented: $isIncorrect) {
-            Button("Continue") { answer = "" }
-        } message: {
-            Text("Your score is \(score)")
-        }
-        .alert(errorTitle, isPresented: $showingError) {
-            Button("Continue") { answer = "" }
-        } message: {
-            Text(errorMessage)
-        }
-    }
-}
-
-// -- MODELS --
-
-struct Question {
-    var firstNumber: Int = 0
-    var secondNumber: Int = 0
-    var answer: Int {
-        firstNumber * secondNumber
-    }
-}
-
-// -- VIEWS --
-
-struct QuestionDisplay: View {
-    let question: Question
-    
-    var body: some View {
-        HStack {
-            Spacer()
-            
-            NumberBox(label: question.firstNumber)
-            
-            Spacer()
-            
-            Image(systemName: "xmark")
-                .font(.largeTitle)
-            
-            Spacer()
-            
-            NumberBox(label: question.secondNumber)
-            
-            Spacer()
-        }
-    }
-}
-
-struct NumberBox: View {
-    let label: Int
-    var color: Color = .blue
-    var cornerSize: CGSize = .init(width: 20, height: 20)
-    
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerSize: cornerSize)
-                .stroke(color, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                .frame(width: 100, height: 100)
-            Text("\(label)")
-                .font(.largeTitle)
-            
-        }
-    }
-}
-
-// -- MODIFIERS --
-
-// Scales the picker image up and down
-struct ScaleUpDown: ViewModifier {
-    @State private var animating = false
-    var multiplicaitonTable: Int
-    var delay: Double
-    
-    func body(content: Content) -> some View {
-        content
-            .scaleEffect(animating ? 1.3: 1.0)
-            .onChange(of: multiplicaitonTable) {
-                
-                withAnimation(.easeOut) {
-                    animating = true
-                }
-                Task {
-                    try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-                    withAnimation(.easeIn) {
-                        animating = false
-                    }
-                }
-                
-            }
-    }
-}
-
-extension View {
-    func scaleUpDown(multiplicationTable: Int, delay: Double = 0.5) -> some View {
-        modifier(ScaleUpDown(multiplicaitonTable: multiplicationTable, delay: delay))
     }
 }
 
