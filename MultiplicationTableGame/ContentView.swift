@@ -66,7 +66,9 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .padding([.bottom, .horizontal])
+                    .padding(.horizontal)
+                    
+                    Spacer()
                     
                     Section("Number of Questions") {
                         Picker("", selection: $selectedQuestionAmount) {
@@ -76,7 +78,7 @@ struct ContentView: View {
                         }
                         .pickerStyle(.segmented)
                     }
-                    .padding([.bottom, .horizontal])
+                    .padding(.horizontal)
                     
                     Spacer()
                     
@@ -88,7 +90,7 @@ struct ContentView: View {
                         }
                         .pickerStyle(.segmented)
                     }
-                    .padding([.bottom, .horizontal])
+                    .padding(.horizontal)
                     
                 }
                 Spacer()
@@ -101,13 +103,13 @@ struct ContentView: View {
                     .padding(.top)
                     .animation(.easeInOut, value: currentQuestion)
                     
-                    Section("What is...?"){
+                    Section{
                         TextField("Type your answer here", text: $answer)
                             .keyboardType(.numberPad)
                             .textFieldStyle(.roundedBorder)
                         
                     }
-                    .padding([.top, .horizontal])
+                    .padding()
                     .onSubmit(checkAnswer)
                 }
                 
@@ -133,7 +135,7 @@ struct ContentView: View {
                         }
                     } label: {
                         StartGameButton(isActive: $isActive)
-                            .padding()
+                            .padding(.horizontal)
                     }
                 }
                 
