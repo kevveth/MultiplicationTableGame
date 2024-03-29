@@ -218,12 +218,13 @@ struct ContentView: View {
                 isIncorrect = true
             }
             
-            if turn == questions.count { gameIsOver = true }
-            
             if turn < questions.count {
                 turn += 1
                 currentQuestion = questions[turn-1]
+            } else {
+                gameIsOver = true
             }
+
         } else {
             inputError(title: "Your input's lookin' a little empty there", message: "Try guessing if you don't know! 🤠")
         }
