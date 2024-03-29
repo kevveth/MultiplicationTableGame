@@ -103,7 +103,7 @@ struct ContentView: View {
                             Button {
                                 checkAnswer()
                             } label: {
-                                Image(systemName: "magnifyingglass.circle")
+                                Image(systemName: "equal.circle.fill")
                                     .font(.largeTitle)
                                     .shadow(radius: 6)
                             }
