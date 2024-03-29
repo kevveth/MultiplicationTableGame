@@ -41,8 +41,7 @@ struct ContentView: View {
     @State private var showingError = false
     
     // Game activity
-    @State private var isActive = false
-    @State private var isAnimating = false
+    @State private var isActive = true
     
     var body: some View {
         NavigationStack {
@@ -52,6 +51,7 @@ struct ContentView: View {
                     Section("Times Table") {
                         RoundedSquareWithStepper(value: $multiplicationTable)
                     }
+                    .font(.headline)
                     .padding(.horizontal)
                     
                     Spacer()
@@ -64,6 +64,7 @@ struct ContentView: View {
                         }
                         .pickerStyle(.segmented)
                     }
+                    .font(.headline)
                     .padding(.horizontal)
                     
                     Spacer()
@@ -76,6 +77,7 @@ struct ContentView: View {
                         }
                         .pickerStyle(.segmented)
                     }
+                    .font(.headline)
                     .padding(.horizontal)
                     
                 }
@@ -86,13 +88,26 @@ struct ContentView: View {
                     Section("What is...?"){
                         QuestionDisplay(question: currentQuestion)
                     }
+                    .font(.headline)
                     .padding(.top)
-                    .animation(.easeInOut, value: currentQuestion)
                     
                     Section{
-                        TextField("Type your answer here", text: $answer)
-                            .keyboardType(.numberPad)
-                            .textFieldStyle(.roundedBorder)
+                        HStack{
+                            TextField("Type your answer here", text: $answer)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(.roundedBorder)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(LinearGradient(colors: [.red,.blue,.yellow], startPoint: .leading, endPoint: .trailing) , lineWidth: 2)
+                                )
+                            Button {
+                                checkAnswer()
+                            } label: {
+                                Image(systemName: "magnifyingglass.circle")
+                                    .font(.largeTitle)
+                                    .shadow(radius: 6)
+                            }
+                        }
                         
                     }
                     .padding()
