@@ -50,21 +50,7 @@ struct ContentView: View {
                 if !isActive {
                     Spacer()
                     Section("Times Table") {
-                        Stepper(value: $multiplicationTable, in: 2...12, step: 1) {
-                            HStack {
-                                Text("")
-                                Image(systemName: "\(multiplicationTable).square")
-                                    .font(.title)
-                            }
-                            .scaleUpDown(multiplicationTable: multiplicationTable)
-                            .scaleEffect(isAnimating ? 1.3 : 1)
-                            .onChange(of: multiplicationTable) {
-                                withAnimation(.interpolatingSpring(stiffness: 170, damping: 5)) {
-                                    isAnimating = true
-                                }
-                                isAnimating = false
-                            }
-                        }
+                        RoundedSquareWithStepper(value: $multiplicationTable)
                     }
                     .padding(.horizontal)
                     
