@@ -41,7 +41,7 @@ struct ContentView: View {
     @State private var showingError = false
     
     // Game activity
-    @State private var isActive = true
+    @State private var isActive = false
     
     var body: some View {
         NavigationStack {
@@ -56,30 +56,33 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    Section("Number of Questions") {
-                        Picker("", selection: $selectedQuestionAmount) {
-                            ForEach(amountOfQuestions, id: \.self) { amount in
-                                Text("\(amount)")
+                    VStack {
+                        Section("Number of Questions") {
+                            Picker("", selection: $selectedQuestionAmount) {
+                                ForEach(amountOfQuestions, id: \.self) { amount in
+                                    Text("\(amount)")
+                                }
                             }
+                            .pickerStyle(.segmented)
                         }
-                        .pickerStyle(.segmented)
+                        .font(.headline)
+                        .padding(.horizontal)
                     }
-                    .font(.headline)
-                    .padding(.horizontal)
                     
                     Spacer()
                     
-                    Section("Difficulty Level") {
-                        Picker("", selection: $diffifulty) {
-                            ForEach(difficultyLevel, id: \.self) { level in
-                                Text("\(level)")
+                    VStack {
+                        Section("Difficulty Level") {
+                            Picker("", selection: $diffifulty) {
+                                ForEach(difficultyLevel, id: \.self) { level in
+                                    Text("\(level)")
+                                }
                             }
+                            .pickerStyle(.segmented)
                         }
-                        .pickerStyle(.segmented)
+                        .font(.headline)
+                        .padding(.horizontal)
                     }
-                    .font(.headline)
-                    .padding(.horizontal)
-                    
                 }
                 Spacer()
                 
@@ -224,7 +227,7 @@ struct ContentView: View {
             } else {
                 gameIsOver = true
             }
-
+            
         } else {
             inputError(title: "Your input's lookin' a little empty there", message: "Try guessing if you don't know! 🤠")
         }

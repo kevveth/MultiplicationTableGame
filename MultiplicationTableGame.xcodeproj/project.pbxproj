@@ -73,17 +73,9 @@
 			isa = PBXGroup;
 			children = (
 				6C01DFC82BA11B0D00D5A1AA /* MultiplicationTableGameApp.swift */,
+				6C08043F2BB6C6490025D533 /* Models */,
+				6C08043E2BB6C5FC0025D533 /* Views */,
 				6C01DFCA2BA11B0D00D5A1AA /* ContentView.swift */,
-				6C08043C2BB6AF1E0025D533 /* RoundedSquareWithStepper.swift */,
-				6C08041D2BB3F0BD0025D533 /* Question.swift */,
-				6C0804192BB3EFA50025D533 /* NumberCardView.swift */,
-				6C08041B2BB3F0060025D533 /* QuestionDisplayVIew.swift */,
-				6C0804172BB3EF300025D533 /* ScaleUpDownModifier.swift */,
-				6C6D2C422BACCB2D008F9F7B /* CustomNavStackModifiers.swift */,
-				6CA20D732BAB9FC50082A791 /* CapsuleGradientButtonStyle.swift */,
-				6CA20D752BABAFBD0082A791 /* DynamicGradientBorderCapsule.swift */,
-				6CA20D772BABC1CB0082A791 /* DynamicGradientBorderButtonStyle.swift */,
-				6C6D2C402BAC15EE008F9F7B /* StartGameButton.swift */,
 				6C01DFCC2BA11B0F00D5A1AA /* Assets.xcassets */,
 				6C01DFCE2BA11B0F00D5A1AA /* MultiplicationTableGame.entitlements */,
 				6C01DFCF2BA11B0F00D5A1AA /* Preview Content */,
@@ -97,6 +89,38 @@
 				6C01DFD02BA11B0F00D5A1AA /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6C08043E2BB6C5FC0025D533 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6C0804402BB6C6760025D533 /* Modifiers */,
+				6C08043C2BB6AF1E0025D533 /* RoundedSquareWithStepper.swift */,
+				6C0804192BB3EFA50025D533 /* NumberCardView.swift */,
+				6C08041B2BB3F0060025D533 /* QuestionDisplayVIew.swift */,
+				6C6D2C402BAC15EE008F9F7B /* StartGameButton.swift */,
+				6CA20D732BAB9FC50082A791 /* CapsuleGradientButtonStyle.swift */,
+				6CA20D752BABAFBD0082A791 /* DynamicGradientBorderCapsule.swift */,
+				6CA20D772BABC1CB0082A791 /* DynamicGradientBorderButtonStyle.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6C08043F2BB6C6490025D533 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6C08041D2BB3F0BD0025D533 /* Question.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6C0804402BB6C6760025D533 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				6C0804172BB3EF300025D533 /* ScaleUpDownModifier.swift */,
+				6C6D2C422BACCB2D008F9F7B /* CustomNavStackModifiers.swift */,
+			);
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
