@@ -33,11 +33,11 @@ A fun and customizable SwiftUI app designed to help children improve their multi
 ## Screenshots
 Main Menu:
 
-![Main Menu Screenshot](./images/mtgMainMenu.png)
+![Main Menu Screenshot](./images/mtgMainMenuV2.png)
 
 Gameplay: 
 
-![Gameplay Screenshot](./images/mtgGameView.png) 
+![Gameplay Screenshot](./images/mtgGameViewV2.png) 
 
 ## Contributing
 
