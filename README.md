@@ -1,4 +1,4 @@
-# Multiplication Table Game
+# Multiplier Master
 
 A fun and customizable SwiftUI app designed to help children improve their multiplication skills.
 
